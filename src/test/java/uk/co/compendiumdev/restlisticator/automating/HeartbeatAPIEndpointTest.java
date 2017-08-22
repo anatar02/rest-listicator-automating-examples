@@ -2,6 +2,7 @@ package uk.co.compendiumdev.restlisticator.automating;
 
 import io.restassured.RestAssured;
 import org.junit.Test;
+import uk.co.compendiumdev.restlisticator.automating.config.RestListicatorServer;
 
 
 public class HeartbeatAPIEndpointTest {
@@ -9,8 +10,10 @@ public class HeartbeatAPIEndpointTest {
     @Test
     public void canCheckThatServerIsRunning(){
 
+        RestListicatorServer server = new RestListicatorServer("localhost",4567);
+
         RestAssured.
-                get("http://localhost:4567/heartbeat").
+                get(server.getHTTPHost() + "/heartbeat").
                 then().assertThat().
                 statusCode(200);
     }
