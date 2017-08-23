@@ -71,6 +71,34 @@ public class ListCreation {
         Assert.assertNotNull(createdList.description);
         Assert.assertNotNull(createdList.createdDate);
         Assert.assertNotNull(createdList.amendedDate);
+    }
 
+    // refactored to an API call and User
+    // bleed over from RestAssured with response object
+    // assertions in the test, rather than the API Abstraction
+    @Test
+    public void createListWithTitleAndDescription(){
+
+        RestListicatorApi api = new RestListicatorApi();
+
+        ListPayload list = new ListPayload();
+        list.title = "title and description";
+        list.description = "description used to create list";
+
+        ApiUser user = new ApiUser("admin", "password");
+
+        Response response = api.createList(user, list);
+
+        response.then().assertThat().statusCode(201);
+
+        ListsPayload createdLists = response.getBody().as(ListsPayload.class);
+
+        ListPayload createdList = createdLists.lists.get(0);
+
+        Assert.assertNotNull(createdList.guid);
+        Assert.assertEquals("title and description",createdList.title);
+        Assert.assertEquals("description used to create list", createdList.description);
+        Assert.assertNotNull(createdList.createdDate);
+        Assert.assertNotNull(createdList.amendedDate);
     }
 }
