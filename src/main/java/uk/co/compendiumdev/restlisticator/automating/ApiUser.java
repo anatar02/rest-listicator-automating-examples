@@ -13,6 +13,10 @@ public class ApiUser {
         this.password = password;
     }
 
+    public static ApiUser getDefaultAdminUser(){
+        return new ApiUser("admin", "password");
+    }
+
     public String getUsername() {
         return username;
     }

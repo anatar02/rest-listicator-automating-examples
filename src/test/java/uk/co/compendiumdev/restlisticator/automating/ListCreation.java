@@ -6,6 +6,8 @@ import io.restassured.response.Response;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.co.compendiumdev.restlisticator.automating.config.RestListicatorServer;
+import uk.co.compendiumdev.restlisticator.payloads.AListPayload;
+import uk.co.compendiumdev.restlisticator.payloads.AListsPayload;
 import uk.co.compendiumdev.restlisticator.payloads.ListPayload;
 import uk.co.compendiumdev.restlisticator.payloads.ListsPayload;
 
@@ -28,7 +30,7 @@ public class ListCreation {
 
         RestListicatorServer server = new RestListicatorServer("localhost",4567);
 
-        ListPayload list = new ListPayload();
+        AListPayload list = new AListPayload();
         list.title = "my title";
 
         RestAssured.
@@ -52,7 +54,7 @@ public class ListCreation {
 
         RestListicatorServer server = RestListicatorServer.getDefault();
 
-        ListPayload list = new ListPayload();
+        AListPayload list = new AListPayload();
         list.title = "my title";
 
         Response response = RestAssured.
@@ -66,9 +68,9 @@ public class ListCreation {
 
         response.then().assertThat().statusCode(201);
 
-        ListsPayload createdLists = response.getBody().as(ListsPayload.class);
+        AListsPayload createdLists = response.getBody().as(AListsPayload.class);
 
-        ListPayload createdList = createdLists.lists.get(0);
+        AListPayload createdList = createdLists.lists.get(0);
 
         Assert.assertNotNull(createdList.guid);
         Assert.assertEquals("my title",createdList.title);
@@ -86,8 +88,8 @@ public class ListCreation {
         RestListicatorApi api = new RestListicatorApi();
 
         ListPayload list = new ListPayload();
-        list.title = "title and description";
-        list.description = "description used to create list";
+        list.setTitle("title and description");
+        list.setDescription("description used to create list");
 
         ApiUser user = new ApiUser("admin", "password");
 
@@ -95,14 +97,95 @@ public class ListCreation {
 
         response.then().assertThat().statusCode(201);
 
-        ListsPayload createdLists = response.getBody().as(ListsPayload.class);
+        AListsPayload createdLists = response.getBody().as(AListsPayload.class);
 
-        ListPayload createdList = createdLists.lists.get(0);
+        AListPayload createdList = createdLists.lists.get(0);
 
         Assert.assertNotNull(createdList.guid);
         Assert.assertEquals("title and description",createdList.title);
         Assert.assertEquals("description used to create list", createdList.description);
         Assert.assertNotNull(createdList.createdDate);
         Assert.assertNotNull(createdList.amendedDate);
+    }
+
+    // note:
+    // created default Admin user static method on ApiUser
+    // created an ApiResponse wrapper around response object
+    //   - think I might want to instantiate RestListicatorApi(user) and then have api.createList(list)
+    //   - or could have user.createList(list)
+    @Test
+    public void createListWithTitleAndDescriptionAndGUID(){
+
+        RestListicatorApi api = new RestListicatorApi();
+
+        ListPayload list = new ListPayload();
+        list.setGuid("thereisalwaystheriskthatthisisnotunique");
+        list.setTitle("title and description");
+        list.setDescription("description used to create list");
+
+
+        Response response = api.createList(ApiUser.getDefaultAdminUser(), list);
+
+        ApiResponse apiResponse = new ApiResponse(response);
+        Assert.assertEquals(201, apiResponse.getStatusCode());
+
+        ListsPayload createdLists = apiResponse.getLists();
+        
+        ListPayload createdList = createdLists.getLists().get(0);
+
+        Assert.assertEquals("thereisalwaystheriskthatthisisnotunique", createdList.getGuid());
+        Assert.assertEquals("title and description",createdList.getTitle());
+        Assert.assertEquals("description used to create list", createdList.getDescription());
+        Assert.assertNotNull(createdList.getCreatedDate());
+        Assert.assertNotNull(createdList.getAmendedDate());
+    }
+
+
+    // note: - added ability for API to use XML to send messages
+    // also added methods to the payloads rather than public fields
+    //     - because of backwards compatibility with previous tests I renamed the previous ListPayload to AListPayload
+    //           - but this didn't keep all backwards compatibility so had to amend earlier test a little
+    //     - new tests should use the ListPayload
+    //     - and the fields should now be private
+    //     - this helps minimize impact on change if payload changes
+    // Added a payload builder for the same reason
+    @Test
+    public void createListWithTitleAndDescriptionAndGUIDUsingXML(){
+
+        RestListicatorApi api = new RestListicatorApi();
+
+        ListPayload list = ListPayload.builder().
+                with().
+                    title("title for the title and description").
+                    description("description used to create list using xml").
+                and().
+                    guid("ihopethisguidisunique").
+                build();
+
+
+        api.sendContentAsXML();
+
+        // note don't have any tests that double check that RestAssured continues to
+        // serialise to XML based on content type so have used proxy to check
+        //RestAssured.proxy("localhost", 8080);
+
+        Response response = api.createList(ApiUser.getDefaultAdminUser(), list);
+
+        ApiResponse apiResponse = new ApiResponse(response);
+
+        Assert.assertEquals(201, apiResponse.getStatusCode());
+
+        // did not set accept so default should be json
+        Assert.assertTrue(apiResponse.payloadIsJson());
+
+        ListsPayload createdLists = apiResponse.getLists();
+
+        ListPayload createdList = createdLists.getLists().get(0);
+
+        Assert.assertEquals("ihopethisguidisunique", createdList.getGuid());
+        Assert.assertEquals("title for the title and description",createdList.getTitle());
+        Assert.assertEquals("description used to create list using xml", createdList.getDescription());
+        Assert.assertNotNull(createdList.getCreatedDate());
+        Assert.assertNotNull(createdList.getAmendedDate());
     }
 }
