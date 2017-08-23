@@ -54,4 +54,14 @@ public class RestListicatorApi {
         this.accept = CONTENT_IS_JSON;
         return this;
     }
+
+    public Response getLists() {
+        return RestAssured.
+                given().
+                    contentType(contentType).
+                    accept(accept).
+                when().
+                    get(server.getHTTPHost() + "/lists").
+                andReturn();
+    }
 }

@@ -202,13 +202,12 @@ public class ListCreation {
                 guid("xmlguidmustbeuniqueyes").
                 build();
 
-
         api.sendContentAsXML();
         api.acceptXML();
 
         // note don't have any tests that double check that RestAssured continues to
         // serialise to XML based on content type so have used proxy to check
-        RestAssured.proxy("localhost", 8080);
+        //RestAssured.proxy("localhost", 8080);
 
         Response response = api.createList(ApiUser.getDefaultAdminUser(), list);
 
@@ -228,5 +227,51 @@ public class ListCreation {
         Assert.assertEquals("description used to create list using xml and expected in xml", createdList.getDescription());
         Assert.assertNotNull(createdList.getCreatedDate());
         Assert.assertNotNull(createdList.getAmendedDate());
+    }
+
+    @Test
+    public void createListAndCheckItIsReturnedInGetLists(){
+
+        RestListicatorApi api = new RestListicatorApi();
+
+        String title = "this is my list it is yes " + System.currentTimeMillis();
+
+        ListPayload list = ListPayload.builder().
+                with().
+                title(title).
+                description("description of my list").
+                build();
+
+        api.sendContentAsXML();
+        api.acceptXML();
+
+        // note don't have any tests that double check that RestAssured continues to
+        // serialise to XML based on content type so have used proxy to check
+        RestAssured.proxy("localhost", 8080);
+
+        Response response = api.createList(ApiUser.getDefaultAdminUser(), list);
+
+        ApiResponse apiResponse = new ApiResponse(response);
+
+        Assert.assertEquals(201, apiResponse.getStatusCode());
+
+
+        apiResponse = new ApiResponse(
+                            api.getLists());
+
+        ListsPayload lists = apiResponse.getLists();
+
+        boolean foundIt = false;
+
+        for(ListPayload aList : lists.getLists()){
+
+            if(aList.getTitle().contentEquals(list.getTitle())){
+                Assert.assertEquals("description of my list", aList.getDescription());
+                foundIt=true;
+                break;
+            }
+        }
+
+        Assert.assertTrue("Could not find list I created", foundIt);
     }
 }
