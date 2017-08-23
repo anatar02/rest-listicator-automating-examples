@@ -64,4 +64,10 @@ public class RestListicatorApi {
                     get(server.getHTTPHost() + "/lists").
                 andReturn();
     }
+
+    public Response getHeartbeat() {
+        return RestAssured.
+                get(server.getHTTPHost() + "/heartbeat").
+                andReturn();
+    }
 }

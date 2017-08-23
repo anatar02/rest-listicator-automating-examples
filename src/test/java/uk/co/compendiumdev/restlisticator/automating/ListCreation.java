@@ -247,7 +247,7 @@ public class ListCreation {
 
         // note don't have any tests that double check that RestAssured continues to
         // serialise to XML based on content type so have used proxy to check
-        RestAssured.proxy("localhost", 8080);
+        //RestAssured.proxy("localhost", 8080);
 
         Response response = api.createList(ApiUser.getDefaultAdminUser(), list);
 
