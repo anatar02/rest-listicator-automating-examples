@@ -19,6 +19,10 @@ public class ListCreation {
     // To set proxy for interactive debugging of messages
     // RestAssured.proxy("localhost", 8080);
 
+    // Note: tests were created in order and when refactored to abstraction layer
+    // the earlier tests were not amended to use the abstraction layer in order to
+    // demonstrate the thought processes and flow of refactoring
+
     @Test
     public void createList(){
 
