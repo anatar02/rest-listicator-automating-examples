@@ -14,4 +14,10 @@ public class RestListicatorServerTest {
         RestListicatorServer server = new RestListicatorServer("localhost",1234);
         Assert.assertEquals("http://localhost:1234", server.getHTTPHost());
     }
+
+    @Test
+    public void canConstructDefault(){
+        RestListicatorServer server = RestListicatorServer.getDefault();
+        Assert.assertEquals("http://localhost:4567", server.getHTTPHost());
+    }
 }

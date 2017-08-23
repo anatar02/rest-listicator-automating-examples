@@ -13,6 +13,10 @@ public class RestListicatorServer {
         this.port = port;
     }
 
+    public static RestListicatorServer getDefault() {
+        return new RestListicatorServer("localhost", 4567);
+    }
+
 
     public String getHTTPHost() {
         return String.format("http://%s:%d", host, port);

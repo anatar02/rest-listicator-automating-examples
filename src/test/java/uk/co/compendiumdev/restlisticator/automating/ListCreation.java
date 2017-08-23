@@ -37,10 +37,15 @@ public class ListCreation {
                 statusCode(201);
     }
 
+    // note - refactored server details into a `getDefault` method
+    // have duplicated "admin", "password" - will want to refactor that soon
+    // have duplicated "/lists" endpoint - will want to refactor that soon
+    // will want to refactor parsing of payloads as this will repeat quickly
+
     @Test
     public void createListAndCheckResultBody(){
 
-        RestListicatorServer server = new RestListicatorServer("localhost",4567);
+        RestListicatorServer server = RestListicatorServer.getDefault();
 
         // Proxy for interctive debugging of messages
         //RestAssured.proxy("localhost", 8080);
