@@ -156,10 +156,10 @@ public class ListCreation {
 
         ListPayload list = ListPayload.builder().
                 with().
-                    title("title for the title and description").
-                    description("description used to create list using xml").
+                title("title for the title and description").
+                description("description used to create list using xml").
                 and().
-                    guid("ihopethisguidisunique").
+                guid("ihopethisguidisunique").
                 build();
 
 
@@ -185,6 +185,47 @@ public class ListCreation {
         Assert.assertEquals("ihopethisguidisunique", createdList.getGuid());
         Assert.assertEquals("title for the title and description",createdList.getTitle());
         Assert.assertEquals("description used to create list using xml", createdList.getDescription());
+        Assert.assertNotNull(createdList.getCreatedDate());
+        Assert.assertNotNull(createdList.getAmendedDate());
+    }
+
+    @Test
+    public void createListUsingXMLAndAcceptXML(){
+
+        RestListicatorApi api = new RestListicatorApi();
+
+        ListPayload list = ListPayload.builder().
+                with().
+                title("title for xml response").
+                description("description used to create list using xml and expected in xml").
+                and().
+                guid("xmlguidmustbeuniqueyes").
+                build();
+
+
+        api.sendContentAsXML();
+        api.acceptXML();
+
+        // note don't have any tests that double check that RestAssured continues to
+        // serialise to XML based on content type so have used proxy to check
+        RestAssured.proxy("localhost", 8080);
+
+        Response response = api.createList(ApiUser.getDefaultAdminUser(), list);
+
+        ApiResponse apiResponse = new ApiResponse(response);
+
+        Assert.assertEquals(201, apiResponse.getStatusCode());
+
+        // did not set accept so default should be json
+        Assert.assertTrue(apiResponse.payloadIsXML());
+
+        ListsPayload createdLists = apiResponse.getLists();
+
+        ListPayload createdList = createdLists.getLists().get(0);
+
+        Assert.assertEquals("xmlguidmustbeuniqueyes", createdList.getGuid());
+        Assert.assertEquals("title for xml response",createdList.getTitle());
+        Assert.assertEquals("description used to create list using xml and expected in xml", createdList.getDescription());
         Assert.assertNotNull(createdList.getCreatedDate());
         Assert.assertNotNull(createdList.getAmendedDate());
     }

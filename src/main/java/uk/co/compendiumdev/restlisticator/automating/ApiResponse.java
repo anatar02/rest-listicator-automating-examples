@@ -24,4 +24,8 @@ public class ApiResponse {
     public boolean payloadIsJson() {
         return response.header("content-type").endsWith("/json");
     }
+
+    public boolean payloadIsXML() {
+        return response.header("content-type").endsWith("/xml");
+    }
 }

@@ -45,4 +45,12 @@ public class ListPayload {
     public void setGuid(String guid) {
         this.guid = guid;
     }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public void setAmendedDate(String amendedDate) {
+        this.amendedDate = amendedDate;
+    }
 }

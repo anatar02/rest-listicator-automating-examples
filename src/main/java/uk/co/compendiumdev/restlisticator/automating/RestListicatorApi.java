@@ -15,16 +15,19 @@ public class RestListicatorApi {
 
     private final String CONTENT_IS_JSON = "application/json";
     private final String CONTENT_IS_XML = "application/xml";
+    private String accept;
 
     public RestListicatorApi(){
         this.server = RestListicatorServer.getDefault();
         this.contentType = CONTENT_IS_JSON; // default to json
+        this.accept = CONTENT_IS_JSON; // default to json
     }
 
     public Response createList(ApiUser user, ListPayload list) {
         return RestAssured.
             given().
                 contentType(contentType).
+                accept(accept).
                 auth().preemptive().
                 basic(user.getUsername(), user.getPassword()).
                 body(list).
@@ -43,4 +46,12 @@ public class RestListicatorApi {
         return this;
     }
 
+    public RestListicatorApi acceptXML() {
+        this.accept = CONTENT_IS_XML;
+        return this;
+    }
+    public RestListicatorApi acceptJSON() {
+        this.accept = CONTENT_IS_JSON;
+        return this;
+    }
 }
