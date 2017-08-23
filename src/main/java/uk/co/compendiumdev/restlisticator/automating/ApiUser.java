@@ -1,8 +1,6 @@
 package uk.co.compendiumdev.restlisticator.automating;
 
-/**
- * Created by Alan on 23/08/2017.
- */
+
 public class ApiUser {
     private final String username;
     private final String password;

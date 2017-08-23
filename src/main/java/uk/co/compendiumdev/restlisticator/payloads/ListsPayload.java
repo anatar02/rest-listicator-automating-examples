@@ -6,9 +6,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
-/**
- * Created by Alan on 23/08/2017.
- */
+
 @XmlRootElement(name = "lists")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ListsPayload {

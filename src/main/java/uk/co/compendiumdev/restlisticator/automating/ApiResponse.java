@@ -1,11 +1,10 @@
 package uk.co.compendiumdev.restlisticator.automating;
 
 import io.restassured.response.Response;
+import uk.co.compendiumdev.restlisticator.payloads.ListPayload;
 import uk.co.compendiumdev.restlisticator.payloads.ListsPayload;
 
-/**
- * Created by Alan on 23/08/2017.
- */
+
 public class ApiResponse {
     private final Response response;
 
@@ -17,7 +16,7 @@ public class ApiResponse {
         return this.response.getStatusCode();
     }
 
-    public ListsPayload getLists() {
+    public ListsPayload asListsPayload() {
         return this.response.getBody().as(ListsPayload.class);
     }
 
@@ -27,5 +26,9 @@ public class ApiResponse {
 
     public boolean payloadIsXML() {
         return response.header("content-type").endsWith("/xml");
+    }
+
+    public ListPayload asListPayload() {
+        return this.response.getBody().as(ListPayload.class);
     }
 }

@@ -11,7 +11,7 @@ import uk.co.compendiumdev.restlisticator.payloads.AListsPayload;
 import uk.co.compendiumdev.restlisticator.payloads.ListPayload;
 import uk.co.compendiumdev.restlisticator.payloads.ListsPayload;
 
-public class ListCreation {
+public class ListCreationTest {
 
     // POST /lists
     // requires authorized and authenticated user
@@ -129,7 +129,7 @@ public class ListCreation {
         ApiResponse apiResponse = new ApiResponse(response);
         Assert.assertEquals(201, apiResponse.getStatusCode());
 
-        ListsPayload createdLists = apiResponse.getLists();
+        ListsPayload createdLists = apiResponse.asListsPayload();
         
         ListPayload createdList = createdLists.getLists().get(0);
 
@@ -165,10 +165,6 @@ public class ListCreation {
 
         api.sendContentAsXML();
 
-        // note don't have any tests that double check that RestAssured continues to
-        // serialise to XML based on content type so have used proxy to check
-        //RestAssured.proxy("localhost", 8080);
-
         Response response = api.createList(ApiUser.getDefaultAdminUser(), list);
 
         ApiResponse apiResponse = new ApiResponse(response);
@@ -178,7 +174,7 @@ public class ListCreation {
         // did not set accept so default should be json
         Assert.assertTrue(apiResponse.payloadIsJson());
 
-        ListsPayload createdLists = apiResponse.getLists();
+        ListsPayload createdLists = apiResponse.asListsPayload();
 
         ListPayload createdList = createdLists.getLists().get(0);
 
@@ -205,10 +201,6 @@ public class ListCreation {
         api.sendContentAsXML();
         api.acceptXML();
 
-        // note don't have any tests that double check that RestAssured continues to
-        // serialise to XML based on content type so have used proxy to check
-        //RestAssured.proxy("localhost", 8080);
-
         Response response = api.createList(ApiUser.getDefaultAdminUser(), list);
 
         ApiResponse apiResponse = new ApiResponse(response);
@@ -218,7 +210,7 @@ public class ListCreation {
         // did not set accept so default should be json
         Assert.assertTrue(apiResponse.payloadIsXML());
 
-        ListsPayload createdLists = apiResponse.getLists();
+        ListsPayload createdLists = apiResponse.asListsPayload();
 
         ListPayload createdList = createdLists.getLists().get(0);
 
@@ -229,49 +221,5 @@ public class ListCreation {
         Assert.assertNotNull(createdList.getAmendedDate());
     }
 
-    @Test
-    public void createListAndCheckItIsReturnedInGetLists(){
 
-        RestListicatorApi api = new RestListicatorApi();
-
-        String title = "this is my list it is yes " + System.currentTimeMillis();
-
-        ListPayload list = ListPayload.builder().
-                with().
-                title(title).
-                description("description of my list").
-                build();
-
-        api.sendContentAsXML();
-        api.acceptXML();
-
-        // note don't have any tests that double check that RestAssured continues to
-        // serialise to XML based on content type so have used proxy to check
-        //RestAssured.proxy("localhost", 8080);
-
-        Response response = api.createList(ApiUser.getDefaultAdminUser(), list);
-
-        ApiResponse apiResponse = new ApiResponse(response);
-
-        Assert.assertEquals(201, apiResponse.getStatusCode());
-
-
-        apiResponse = new ApiResponse(
-                            api.getLists());
-
-        ListsPayload lists = apiResponse.getLists();
-
-        boolean foundIt = false;
-
-        for(ListPayload aList : lists.getLists()){
-
-            if(aList.getTitle().contentEquals(list.getTitle())){
-                Assert.assertEquals("description of my list", aList.getDescription());
-                foundIt=true;
-                break;
-            }
-        }
-
-        Assert.assertTrue("Could not find list I created", foundIt);
-    }
 }

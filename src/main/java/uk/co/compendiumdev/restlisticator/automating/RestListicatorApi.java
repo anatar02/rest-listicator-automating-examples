@@ -5,9 +5,7 @@ import io.restassured.response.Response;
 import uk.co.compendiumdev.restlisticator.automating.config.RestListicatorServer;
 import uk.co.compendiumdev.restlisticator.payloads.ListPayload;
 
-/**
- * Created by Alan on 23/08/2017.
- */
+
 public class RestListicatorApi {
 
     private RestListicatorServer server;
@@ -68,6 +66,28 @@ public class RestListicatorApi {
     public Response getHeartbeat() {
         return RestAssured.
                 get(server.getHTTPHost() + "/heartbeat").
+                andReturn();
+    }
+
+    public Response getList(String guid) {
+        return RestAssured.
+                given().
+                contentType(contentType).
+                accept(accept).
+                when().
+                get(server.getHTTPHost() + "/lists/" + guid).
+                andReturn();
+    }
+
+    public Response deleteList(ApiUser user, String guid) {
+        return RestAssured.
+                given().
+                    contentType(contentType).
+                    accept(accept).
+                    auth().preemptive().
+                    basic(user.getUsername(), user.getPassword()).
+                when().
+                delete(server.getHTTPHost() + "/lists/" + guid).
                 andReturn();
     }
 }
