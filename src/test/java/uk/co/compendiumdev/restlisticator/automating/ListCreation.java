@@ -15,13 +15,14 @@ public class ListCreation {
     // requires authorized and authenticated user
     // create a list with partial payload e.g. {title:'my title'}
 
+    // NOTE:
+    // To set proxy for interactive debugging of messages
+    // RestAssured.proxy("localhost", 8080);
+
     @Test
     public void createList(){
 
         RestListicatorServer server = new RestListicatorServer("localhost",4567);
-
-        // Proxy for interctive debugging of messages
-        //RestAssured.proxy("localhost", 8080);
 
         ListPayload list = new ListPayload();
         list.title = "my title";
@@ -46,9 +47,6 @@ public class ListCreation {
     public void createListAndCheckResultBody(){
 
         RestListicatorServer server = RestListicatorServer.getDefault();
-
-        // Proxy for interctive debugging of messages
-        //RestAssured.proxy("localhost", 8080);
 
         ListPayload list = new ListPayload();
         list.title = "my title";
