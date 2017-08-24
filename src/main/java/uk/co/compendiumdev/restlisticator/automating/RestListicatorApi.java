@@ -15,10 +15,14 @@ public class RestListicatorApi {
     private final String CONTENT_IS_XML = "application/xml";
     private String accept;
 
-    public RestListicatorApi(){
-        this.server = RestListicatorServer.getDefault();
+    public RestListicatorApi(RestListicatorServer server){
+        this.server = server;
         this.contentType = CONTENT_IS_JSON; // default to json
         this.accept = CONTENT_IS_JSON; // default to json
+    }
+
+    public RestListicatorApi(){
+        this(RestListicatorServer.getDefault());
     }
 
     public Response createList(ApiUser user, ListPayload list) {

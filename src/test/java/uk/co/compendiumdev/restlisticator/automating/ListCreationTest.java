@@ -85,7 +85,8 @@ public class ListCreationTest {
     @Test
     public void createListWithTitleAndDescription(){
 
-        RestListicatorApi api = new RestListicatorApi();
+        RestListicatorServer server = RestListicatorServer.getDefault();
+        RestListicatorApi api = new RestListicatorApi(server);
 
         ListPayload list = new ListPayload();
         list.setTitle("title and description");
