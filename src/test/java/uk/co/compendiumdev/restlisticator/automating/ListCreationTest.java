@@ -222,5 +222,28 @@ public class ListCreationTest {
         Assert.assertNotNull(createdList.getAmendedDate());
     }
 
+    // started to create a 'static' wrapper around the API to make tests easier to read and write
+    // if I only had a static api then the test architecture might be less flexible as I could not
+    // run requests against multiple servers in the same code and might have issues with parallel
+    // execution, trade this off against easy to read and maintain
+    @Test
+    public void canUseAStaticApiToCreate(){
+
+        ListPayload list = ListPayload.builder().
+                with().
+                title("title for xml response").
+                description("description used to create list using xml and expected in xml").
+                and().
+                guid("xmlguidmustbeuniqueyes").
+                build();
+
+        ListicatorAPI.sendContentAsXML();
+        ListicatorAPI.acceptXML();
+
+        ApiResponse apiResponse = ListicatorAPI.postList(ApiUser.getDefaultAdminUser(), list);
+
+        
+        Assert.assertEquals(201, apiResponse.getStatusCode());
+    }
 
 }
