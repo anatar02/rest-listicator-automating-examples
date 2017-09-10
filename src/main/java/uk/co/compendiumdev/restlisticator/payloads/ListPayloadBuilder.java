@@ -33,4 +33,14 @@ public class ListPayloadBuilder {
     public ListPayload build() {
         return listPayload;
     }
+
+    public ListPayloadBuilder createdDate(String createdDate) {
+        listPayload.setCreatedDate(createdDate);
+        return this;
+    }
+
+    public ListPayloadBuilder amendedDate(String amendedDate) {
+        listPayload.setAmendedDate(amendedDate);
+        return this;
+    }
 }

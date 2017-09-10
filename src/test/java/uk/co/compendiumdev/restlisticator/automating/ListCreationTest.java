@@ -222,6 +222,34 @@ public class ListCreationTest {
         Assert.assertNotNull(createdList.getAmendedDate());
     }
 
+
+    @Test
+    public void putListUsingXMLAndAcceptXML(){
+
+        RestListicatorApi api = new RestListicatorApi();
+
+        ListPayload list = ListPayload.builder().
+                with().
+                    title("title for xml response").
+                    description("description used to create list using xml and expected in xml").
+                and().
+                    guid("xmlguidmustbeuniqueforputisyes" + System.currentTimeMillis()).
+                and().
+                    createdDate("2017-07-19-16-17-47").
+                    amendedDate("2017-07-19-16-17-48").
+                build();
+
+        api.sendContentAsXML();
+        api.acceptXML();
+
+        Response response = api.putList(ApiUser.getDefaultAdminUser(), list);
+
+        ApiResponse apiResponse = new ApiResponse(response);
+
+        Assert.assertEquals(201, apiResponse.getStatusCode());
+
+    }
+
     // started to create a 'static' wrapper around the API to make tests easier to read and write
     // if I only had a static api then the test architecture might be less flexible as I could not
     // run requests against multiple servers in the same code and might have issues with parallel

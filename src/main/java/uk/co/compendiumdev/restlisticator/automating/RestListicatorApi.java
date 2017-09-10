@@ -94,4 +94,16 @@ public class RestListicatorApi {
                 delete(server.getHTTPHost() + "/lists/" + guid).
                 andReturn();
     }
+
+    public Response putList(ApiUser user, ListPayload list) {
+        return RestAssured.given().
+                contentType(contentType).
+                accept(accept).
+                auth().preemptive().
+                basic(user.getUsername(), user.getPassword()).
+                body(list).
+                when().
+                put(server.getHTTPHost() + "/lists/" + list.getGuid()).
+                andReturn();
+    }
 }
