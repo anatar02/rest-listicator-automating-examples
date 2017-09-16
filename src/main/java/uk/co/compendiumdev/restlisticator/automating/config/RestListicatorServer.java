@@ -16,7 +16,7 @@ public class RestListicatorServer {
 
     public static RestListicatorServer getDefault() {
         return new RestListicatorServer(HTTPHost, 4567);
-        //return new RestListicatorServer("rest-list-system.herokuapp.com", 443).setScheme("https");
+        //return new RestListicatorServer("rest-list-system.herokuapp.com", 443).setScheme("https").withNoPort();
     }
 
 
