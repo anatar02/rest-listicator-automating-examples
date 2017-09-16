@@ -4,9 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import uk.co.compendiumdev.restlisticator.automating.config.RestListicatorServer;
 
-/**
- * Created by Alan on 22/08/2017.
- */
 public class RestListicatorServerTest {
 
     @Test
@@ -19,5 +16,19 @@ public class RestListicatorServerTest {
     public void canConstructDefault(){
         RestListicatorServer server = RestListicatorServer.getDefault();
         Assert.assertEquals("http://localhost:4567", server.getHTTPHost());
+    }
+
+    @Test
+    public void canConstructToUseHTTPs(){
+        // a little awkward, but this was an easy way to retain backwards compatibility
+        RestListicatorServer server = RestListicatorServer.getDefault().setScheme("https");
+        Assert.assertEquals("https://localhost:4567", server.getHTTPHost());
+    }
+
+    @Test
+    public void canExcludePort(){
+        // a little awkward, but this was an easy way to retain backwards compatibility
+        RestListicatorServer server = RestListicatorServer.getDefault().setScheme("https").withNoPort();
+        Assert.assertEquals("https://localhost", server.getHTTPHost());
     }
 }
