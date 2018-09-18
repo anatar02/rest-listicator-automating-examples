@@ -12,6 +12,7 @@ public class HeartbeatAPIEndpointTest {
     public void canCheckThatServerIsRunning(){
 
         RestListicatorServer server = new RestListicatorServer("localhost",4567);
+        //RestAssured.proxy("localhost", 8888);
 
         RestAssured.
                 get(server.getHTTPHost() + "/heartbeat").

@@ -8,6 +8,8 @@ public class RestListicatorServer {
     private String scheme="http";
     private String portFormatTemplate=":%d";
 
+    // TODO: support configuration for the server to be running on a different path e.g. /listicator
+
 
     public RestListicatorServer(String host, int port) {
         this.host = host;
