@@ -28,7 +28,7 @@ public class ListCreationTest {
     @Test
     public void createList(){
 
-        RestListicatorServer server = new RestListicatorServer("localhost",4567);
+        RestListicatorServer server = RestListicatorServer.getDefault();
 
         AListPayload list = new AListPayload();
         list.title = "my title";

@@ -11,7 +11,7 @@ public class HeartbeatAPIEndpointTest {
     @Test
     public void canCheckThatServerIsRunning(){
 
-        RestListicatorServer server = new RestListicatorServer("localhost",4567);
+        RestListicatorServer server = new RestListicatorServer("localhost",4567).setApiRoot("listicator");
         //RestAssured.proxy("localhost", 8888);
 
         RestAssured.
