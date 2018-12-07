@@ -1,7 +1,8 @@
-package uk.co.compendiumdev.restlisticator.automating;
+package uk.co.compendiumdev.restlisticator.domain;
 
 import org.junit.Assert;
 import org.junit.Test;
+import uk.co.compendiumdev.restlisticator.automating.ApiUser;
 
 /**
  * Created by Alan on 23/08/2017.
