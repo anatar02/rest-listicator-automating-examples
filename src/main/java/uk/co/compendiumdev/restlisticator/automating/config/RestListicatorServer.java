@@ -12,7 +12,7 @@ public class RestListicatorServer {
     private String pathFormatTemplate="";
     private final String schemeHostTemplate="%s://%s";
 
-    // TODO: support configuration for the server to be running on a different path e.g. /listicator
+    // TODO support configuration from environment variables and properties
 
 
     public RestListicatorServer(String host, int port) {

@@ -3,6 +3,10 @@ package uk.co.compendiumdev.restlisticator.payloads;
 public class ListPayloadBuilder {
     private ListPayload listPayload;
 
+    public static ListPayloadBuilder create(){
+        return new ListPayloadBuilder();
+    }
+
     public ListPayloadBuilder(){
         listPayload = new ListPayload();
     }
